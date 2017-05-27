@@ -1,0 +1,60 @@
+<html>
+<head>
+    <title>Quick Cannon Menu</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+    <link rel="stylesheet" type="text/css" href="main.css" />
+    
+</head>
+<body ng-app="menu" >
+    <div class="container" ng-controller="menuController as mc">
+      <div class="row">
+        <div class="col-xs-8 col-xs-offset-2">
+          <form name="selectMeal">
+            <label>Date:
+            <input type="text" ng-model="date" />
+            </label>
+            <button ng-click="checkMeals()">Check Meals</button>
+            <br>
+            <span ng-show="menuExists">
+            <label>Meal:</label>
+            <select name="meal" ng-model="meal">
+              <option value="BREAKFAST">Breakfast</option>
+              <option value="LUNCH">Lunch</option>
+              <option value="DINNER">Dinner</option>
+            </select>
+            <button ng-click="getMeal()">Get Meal</button>
+          </span>
+          <button ng-click="clearMeals()">Clear List</button>
+          </form>
+        </div>
+      </div>
+        <div class="row">
+          <div class="col-xs-offset-2 col-xs-9">
+          <ul ng-if="menuData.length > 0"> 
+            <li ng-repeat="menu in menuData">
+            <h1 ng-click="hideShow(menu)">{{menu.date}} <small>{{menu.meal}}</small></h1>
+            <span ng-repeat="recipe in menu.menuItems" ng-show="menu.expanded">
+            <h2><small>{{recipe.category}}</small>  {{recipe.shortname}} </h2>
+                <p>
+                Calories: {{recipe.nutrients[0]}}; 
+                Fat: {{recipe.nutrients[1]}}; 
+                Carbs: {{recipe.nutrients[6]}};
+                Protein: {{recipe.nutrients[9]}}
+                </p>
+              </span>
+              </li>
+            </ul>
+            <h4 ng-if="!(menuData.length > 0)">
+              Please enter a date in the form YYYYMMDD and select a meal. 
+              If the date is outside the current week, make sure to click "Check Meals" to ensure the menu exists.
+              
+            </h4>
+          </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    <script type="text/javascript" src="javascripts/app.js"></script>
+</body>
+</html>
