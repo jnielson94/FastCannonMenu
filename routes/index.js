@@ -1,6 +1,20 @@
 var express = require('express');
 var router = express.Router();
 var request = require('request');
+/* Set up mongoose in order to connect to mongo database */
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/cannonMeals');
+var mealSchema = mongoose.Schema({
+	date: String,
+  meal: String,
+	result: String
+})
+var Meal = mongoose.model('Meal', mealSchema);
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function() {
+	console.log('Connected');
+});
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -14,19 +28,33 @@ router.get('/menu', function(req,res,next) {
   var meal = req.query.m;
   var url = cannonMenu + "?servedate=" + date + "&mealname=" + meal +
     "&mealid=" + mealid + "&viewname=MenuItemsJSON";
-    console.log(url);
-    request(url).pipe(res);
+    console.log(new Date().toLocaleString() + '  ' + url);
+  request(url, function(error, response, body) {
+    if(error) console.log("ERROR: " + error);
+    if(!body) {
+      console.log("No body?");
+      res.status(500).send("No response?");
+      return;
+    }
+    console.log(new Date().toLocaleString() + '  ' + body);
+    body = JSON.parse(body);
+    res.status(200).json(body);
+  });
 });
 
 var mealid = 6772;
 router.get('/menus', function(req,res,next) {
   var date = req.query.d;
   var url = cannonMenu + "?servedate=" + date + "&viewname=MenusJSON";
-  console.log(url);
   request(url, function(error, response, body) {
-    if(error) console.log(error);
-    console.log(body);
-    console.log(JSON.parse(body));
+    if(error) console.log("ERROR: " + error);
+    if(!body) {
+      console.log("No body?");
+      res.status(500).send("No response?");
+      return;
+    }
+    console.log(new Date().toLocaleString() + '  ' + url);
+    console.log(new Date().toLocaleString() + '  ' + body);
     body = JSON.parse(body);
     if(body.menus[0]) {
       mealid = body.menus[0].mealid;

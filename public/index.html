@@ -8,53 +8,71 @@
     
 </head>
 <body ng-app="menu" >
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
+    <script type="text/javascript" src="javascripts/app.js"></script>
     <div class="container" ng-controller="menuController as mc">
+      <div class="row">
+      </div>
       <div class="row">
         <div class="col-xs-8 col-xs-offset-2">
           <form name="selectMeal">
-            <label>Date:
-            <input type="text" ng-model="date" />
-            </label>
+            <label>Month: </label>
+            <input class="short-input" type="text" ng-model="Month" />
+            <label>Day: </label>
+            <input class="short-input" type="text" ng-model="Day" />
             <button ng-click="checkMeals()">Check Meals</button>
+            <label>Next Year: </label>
+            <input type="checkbox" ng-model="nextYear" />
             <br>
             <span ng-show="menuExists">
             <label>Meal:</label>
             <select name="meal" ng-model="meal">
               <option value="BREAKFAST">Breakfast</option>
               <option value="LUNCH">Lunch</option>
-              <option value="DINNER">Dinner</option>
+              <option value="DINNER" selected>Dinner</option>
             </select>
             <button ng-click="getMeal()">Get Meal</button>
           </span>
+          <button ng-click="getNextWeek()">Get Next Week</button>
           <button ng-click="clearMeals()">Clear List</button>
           </form>
+        <image id="loading" ng-show="loaderShown" src="loading.gif" alt="Loading" />
         </div>
       </div>
         <div class="row">
-          <div class="col-xs-offset-2 col-xs-9">
+          <div class="col-xs-offset-2 col-xs-9 col-md-10 col-md-offset-1">
           <ul ng-if="menuData.length > 0"> 
             <li ng-repeat="menu in menuData">
-            <h1 ng-click="hideShow(menu)">{{menu.date}} <small>{{menu.meal}}</small></h1>
-            <span ng-repeat="recipe in menu.menuItems" ng-show="menu.expanded">
-            <h2><small>{{recipe.category}}</small>  {{recipe.shortname}} </h2>
-                <p>
+            <h2 ng-click="hideShow(menu)">{{menu.date}} <small>{{menu.meal}}</small></h2>
+            <div class="row" ng-repeat="recipe in menu.menuItems" ng-show="menu.expanded">
+            <div class="col-md-5 col-xs-12">
+            <h3><small>{{recipe.category}}</small>  {{recipe.shortname}} </h3>
+          </div>
+          <div class="col-md-7 col-xs-12">
+                <h3>
+                Nutrition:
+                <small>
                 Calories: {{recipe.nutrients[0]}}; 
                 Fat: {{recipe.nutrients[1]}}; 
                 Carbs: {{recipe.nutrients[6]}};
                 Protein: {{recipe.nutrients[9]}}
-                </p>
-              </span>
+              </small>
+                </h3>
+              </div>
+              </div>
               </li>
             </ul>
-            <h4 ng-if="!(menuData.length > 0)">
-              Please enter a date in the form YYYYMMDD and select a meal. 
-              If the date is outside the current week, make sure to click "Check Meals" to ensure the menu exists.
-              
-            </h4>
+            <p ng-if="!(menuData.length > 0)">
+              This site will pull data for the menu from the BYU Cannon Commons site located here: dining.byu.edu/commons/menus.html. All data credit goes to them. All I did was pull it in a simpler way and format it in a way that worked for our family.
+              <br>
+              To pull the menu data for today, select a meal and go for it! Otherwise, input the month (in number format, 5 for example), and the date (also number). The year is assumed to be the current year. If you need the next year, check the box. 
+              <br>
+              If the date is outside the current week, make sure to click "Check Meals" to ensure the menu exists. Once you've checked meals, or if it is the current week, select a meal and click "Get Meal". Clicking Clear List will clear all previously retrieved meals.
+              <br>
+              The "Get Next Week" button will pull the upcoming week from Monday through Sunday. In theory if it is currently a day other than Sunday it would start from the upcoming Sunday. If there's issues, let me know.
+            </p>
           </div>
         </div>
     </div>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.min.js"></script>
-    <script type="text/javascript" src="javascripts/app.js"></script>
 </body>
 </html>
