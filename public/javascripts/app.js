@@ -90,11 +90,24 @@ function menuController($scope, $http) {
       $scope.menuData.push(menu);
     })
   }
+  function parseMealDateToReadable(date) {
+    console.log(date);
+    if(date.length != 8) {
+      console.log("Weird date: ", date);
+    }
+    var year = Number(date.substring(0,4));
+    var month = Number(date.substring(4,6)) - 1;
+    var day = Number(date.substring(6,8));
+    var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+    let theDate = new Date(Date.UTC(year, month, day))
+    return theDate.toLocaleDateString("en-US", options);
+  }
+
   function handleResponse(response) {
       console.log(response.data);
       if(response.data.menus.length <= 0) return "Error"
       var menu = {
-        "date": response.data.menus[0].servedate,
+        "date": parseMealDateToReadable(response.data.menus[0].servedate),
         "expanded": true,
         "meal": response.data.menus[0].mealname,
         "menuItems": []
@@ -143,6 +156,8 @@ function menuController($scope, $http) {
           var year = safeDate.getFullYear();
           var month = safeDate.getMonth() + 1;
           var day = safeDate.getDate();
+          var urlL = "/menu?d=" + formatDate(year, month, day) + "&m=BREAKFAST";
+          mealPromises.push($scope.pullMeal(urlL));
           var urlL = "/menu?d=" + formatDate(year, month, day) + "&m=LUNCH";
           mealPromises.push($scope.pullMeal(urlL));
           var urlD = "/menu?d=" + formatDate(year, month, day) + "&m=DINNER";
