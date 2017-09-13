@@ -1,8 +1,8 @@
 'use strict'
 
-var app = angular.module('menu', [])
+var app = angular.module('menu', ['cfp.hotkeys'])
 
-app.controller('menuController', ['$scope', '$http', menuController])
+app.controller('menuController', ['$scope', '$http', 'hotkeys', menuController])
 
 function pad (number, length) {
   var str = '' + number
@@ -22,7 +22,7 @@ function now () {
   var date = pad(today().getDate(), 2)
   return '' + year + month + date
 }
-function menuController ($scope, $http) {
+function menuController ($scope, $http, hotkeys) {
   $scope.menuExists = true
   $scope.meal = 'DINNER'
   $scope.menuData = []
@@ -73,6 +73,32 @@ function menuController ($scope, $http) {
 
   $scope.date = now()
   $scope.checkMeals()
+
+  hotkeys.add({
+    combo: 'up',
+    description: 'Move up the list',
+    callback: function() {
+      $scope.showAMeal(-1);
+    }
+  })
+
+  hotkeys.add({
+    combo: 'down',
+    description: 'Move down the list',
+    callback: function() {
+      $scope.showAMeal(1);
+    }
+  });
+  $scope.showAMeal = function(direction) { //direction should be 1 or -1 (down or up respectively)
+    for(let i = 0; i < $scope.menuData.length; i++) {
+      if($scope.menuData[i].expanded) {
+        $scope.menuData[i].expanded = false;
+        if($scope.menuData[i+direction]) $scope.menuData[i+direction].expanded = true;
+        return;
+      }
+    }
+    if($scope.menuData[0]) $scope.menuData[0].expanded = true;
+  }
 
   $scope.getMeal = function () {
     $scope.date = validateInputtedDate()
