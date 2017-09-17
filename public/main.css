@@ -43,6 +43,14 @@ h6 {
   font-size: 1rem;
 }
 
+a {
+  color: #0A2AC1;
+}
+
+a:hover {
+  color: #0F0FAF;
+}
+
 /**
 Loading icon
 **/

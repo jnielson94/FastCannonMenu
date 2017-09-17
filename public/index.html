@@ -1,4 +1,4 @@
-<html>
+<html lang="en">
 
 <head>
   <title>Quick Cannon Menu</title>
@@ -31,14 +31,14 @@
     <div class="row">
       <div class="col-md-10 col-xs-9 col-xs-offset-2">
         <form name="selectMeal">
-          <label>Month: </label>
-          <input class="short-input" type="number" ng-model="Month" />
-          <label>Day: </label>
-          <input class="short-input" type="number" ng-model="Day" />
+          <label for="month">Month: </label>
+          <input class="short-input" type="number" id="month" name="month" ng-model="Month" />
+          <label for="day">Day: </label>
+          <input class="short-input" type="number" id="day" name="day" ng-model="Day" />
           <button ng-click="checkMeals()">Check Meals</button>
           <span ng-show="menuExists">
             <label for="meal">Meal:</label>
-            <select name="meal" ng-model="meal">
+            <select name="meal" id="meal" ng-model="meal">
               <option value="BREAKFAST">Breakfast</option>
               <option value="LUNCH">Lunch</option>
               <option value="DINNER" selected>Dinner</option>
@@ -48,8 +48,8 @@
           <br>
           <button ng-click="getNextWeek()">Get Next Week</button>
           <button ng-if="(menuData.length > 0)" ng-click="clearMeals()">Clear List</button>
-          <label>Next Year: </label>
-          <input type="checkbox" ng-model="nextYear" />
+          <label for="nextYear" >Next Year: </label>
+          <input type="checkbox" id="nextYear" name="nextYear" ng-model="nextYear" />
         </form>
       </div>
     </div>
