@@ -124,7 +124,7 @@ function menuController ($scope, $http, hotkeys) {
     var month = Number(date.substring(4, 6))
     var day = Number(date.substring(6, 8))
     var options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }
-    let theDate = new Date(year + "-" + month + "-" + day)
+    let theDate = new Date(year,month-1,day)
     return theDate.toLocaleDateString('en-US', options)
   }
 
